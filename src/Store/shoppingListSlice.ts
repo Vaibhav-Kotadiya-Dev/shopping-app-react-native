@@ -40,7 +40,7 @@ const shoppingListSlice = createSlice({
       const {id} = action?.payload;
       const item = state?.items?.find(i => i?.id === id);
       if (item) {
-        item.purchased = true;
+        item.purchased = !item.purchased;
       }
     },
   },
