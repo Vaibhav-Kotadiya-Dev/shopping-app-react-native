@@ -47,6 +47,11 @@ export default StyleSheet.create({
     right: 16,
     position: 'absolute',
   },
+  iosFabStyle: {
+    bottom: 30,
+    right: 16,
+    position: 'absolute',
+  },
   flexGrow: {
     flexGrow: 1,
   },

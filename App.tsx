@@ -26,7 +26,10 @@ const App = () => {
           <Stack.Screen
             name="AddEditItem"
             component={AddEditItemScreen}
-            options={{title: 'Add/Edit Item'}}
+            options={{
+              headerBackTitleVisible: false,
+              headerTintColor: '#000',
+            }}
           />
         </Stack.Navigator>
       </NavigationContainer>

@@ -1,5 +1,12 @@
 import React from 'react';
-import {View, Text, FlatList, TouchableOpacity, Alert} from 'react-native';
+import {
+  View,
+  Text,
+  FlatList,
+  TouchableOpacity,
+  Alert,
+  Platform,
+} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {RootState} from '../../Store/store';
 import {deleteItem, markItemAsPurchased} from '../../Store/shoppingListSlice';
@@ -11,16 +18,16 @@ import {RootStackParamList} from '../../../App';
 import {AnimatedFAB} from 'react-native-paper';
 import styles from './ShoppingList.styles';
 
-type ShoppingListScreenNavigationProp = StackNavigationProp<
+type ShoppingListNavigationProp = StackNavigationProp<
   RootStackParamList,
   'ShoppingList'
 >;
 
 type Props = {
-  navigation: ShoppingListScreenNavigationProp;
+  navigation: ShoppingListNavigationProp;
 };
 
-const ShoppingListScreen: React.FC<Props> = ({navigation}) => {
+const ShoppingList: React.FC<Props> = ({navigation}) => {
   const dispatch = useDispatch();
   const shoppingList = useSelector(
     (state: RootState) => state.shoppingList.items,
@@ -40,7 +47,15 @@ const ShoppingListScreen: React.FC<Props> = ({navigation}) => {
         </TouchableOpacity>
       )}>
       <View style={styles.itemContainer}>
-        <TouchableOpacity style={styles.itemTextContainer} onPress={() => {}}>
+        <TouchableOpacity
+          style={styles.itemTextContainer}
+          disabled={item.purchased}
+          onPress={() =>
+            navigation.navigate('AddEditItem', {
+              itemId: item.id,
+              oldName: item.itemName,
+            })
+          }>
           <Text
             style={[
               styles.itemText,
@@ -77,7 +92,9 @@ const ShoppingListScreen: React.FC<Props> = ({navigation}) => {
     );
   };
 
-  const onAddItem = () => {};
+  const onAddItem = () => {
+    navigation.navigate('AddEditItem', {});
+  };
 
   const emptyComponent = () => (
     <View style={styles.emptyListContainer}>
@@ -93,6 +110,7 @@ const ShoppingListScreen: React.FC<Props> = ({navigation}) => {
         keyExtractor={item => item.id.toString()}
         contentContainerStyle={styles.flexGrow}
         ListEmptyComponent={emptyComponent}
+        showsVerticalScrollIndicator={false}
       />
       <AnimatedFAB
         icon={'plus'}
@@ -101,10 +119,10 @@ const ShoppingListScreen: React.FC<Props> = ({navigation}) => {
         onPress={onAddItem}
         visible
         animateFrom={'left'}
-        style={styles.fabStyle}
+        style={Platform.OS === 'ios' ? styles.iosFabStyle : styles.fabStyle}
       />
     </View>
   );
 };
 
-export default ShoppingListScreen;
+export default ShoppingList;
